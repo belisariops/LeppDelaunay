@@ -15,3 +15,5 @@ class Point:
         if self.x == other.x and self.y == other.y:
             return True
         return False
+    def dist(self,point):
+        return pow(pow(point.x - self.x,2)+pow(point.y-self.y,2),0.5)
