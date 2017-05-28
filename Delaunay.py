@@ -55,57 +55,57 @@ class Delaunay:
 
 
     def legalizeTriangle(self, t):
-        vertex = None
-        other = t.t3
-
-        if other != None:
-            # Obtengo el vertice que no pertenece a t
-            vertex = other.getVertex(t)
-
-            # Calculo al determinante de la matriz para ver si esta dentro del circulo
-            if self.inCircle(t, vertex) > 0:
-                triangle1 = Triangle(t.v1, vertex, t.v3, None, None, None)
-                triangle2 = Triangle(vertex, t.v2, t.v3, t.t1, triangle1,other.getTriangleWithPoints(vertex,t.v2)) #other.t3)
-                triangle1.t1 = triangle2
-                triangle1.t2 = t.t2
-                triangle1.t3 = other.getTriangleWithPoints(triangle1.v1, triangle1.v2)
-
-                # Refrescar vecinos
-                if triangle1.t2 is not None:
-                    triangle1.t2.refreshPointer(t, triangle1)
-                if triangle1.t3 is not None:
-                    triangle1.t3.refreshPointer(other, triangle1)#t por other
-                if triangle2.t1 is not None:
-                    triangle2.t1.refreshPointer(t, triangle2)
-                if triangle2.t3 is not None:
-                    triangle2.t3.refreshPointer(other, triangle2)#t por other
-
-                #Elimino el triangulo que se encontraba en el arreglo yu participo del cambio de diagonales
-                try:
-                    self.triangles.remove(other)
-                except:
-                    print "%s no existe en el arreglo " % other
-
-                #Borro linea (la coloreo amarillo)
-                self.canvas.deleteLine(triangle1.v1, triangle2.v2)
-
-                #Reviso si los nuevos triangulos cumplen con Delaunay
-                self.legalizeTriangle(triangle1)
-                self.legalizeTriangle(triangle2)
-                return
-
-            #Cumple con el test del circulo, lo agrego al arreglo y lo dibujo
-            else:
-                self.triangles.append(t)
-                self.canvas.drawLine(t.v2, t.v3)
-                self.canvas.drawLine(t.v1, t.v3)
-                return
-        else:
-            self.triangles.append(t)
-            self.counter += 1
-            self.canvas.drawLine(t.v2, t.v3)
-            self.canvas.drawLine(t.v1, t.v3)
-            return
+        # vertex = None
+        # other = t.t3
+        #
+        # if other != None:
+        #     # Obtengo el vertice que no pertenece a t
+        #     vertex = other.getVertex(t)
+        #
+        #     # Calculo al determinante de la matriz para ver si esta dentro del circulo
+        #     if self.inCircle(t, vertex) > 0:
+        #         triangle1 = Triangle(t.v1, vertex, t.v3, None, None, None)
+        #         triangle2 = Triangle(vertex, t.v2, t.v3, t.t1, triangle1,other.getTriangleWithPoints(vertex,t.v2)) #other.t3)
+        #         triangle1.t1 = triangle2
+        #         triangle1.t2 = t.t2
+        #         triangle1.t3 = other.getTriangleWithPoints(triangle1.v1, triangle1.v2)
+        #
+        #         # Refrescar vecinos
+        #         if triangle1.t2 is not None:
+        #             triangle1.t2.refreshPointer(t, triangle1)
+        #         if triangle1.t3 is not None:
+        #             triangle1.t3.refreshPointer(other, triangle1)#t por other
+        #         if triangle2.t1 is not None:
+        #             triangle2.t1.refreshPointer(t, triangle2)
+        #         if triangle2.t3 is not None:
+        #             triangle2.t3.refreshPointer(other, triangle2)#t por other
+        #
+        #         #Elimino el triangulo que se encontraba en el arreglo yu participo del cambio de diagonales
+        #         try:
+        #             self.triangles.remove(other)
+        #         except:
+        #             print "%s no existe en el arreglo " % other
+        #
+        #         #Borro linea (la coloreo amarillo)
+        #         self.canvas.deleteLine(triangle1.v1, triangle2.v2)
+        #
+        #         #Reviso si los nuevos triangulos cumplen con Delaunay
+        #         self.legalizeTriangle(triangle1)
+        #         self.legalizeTriangle(triangle2)
+        #         return
+        #
+        #     #Cumple con el test del circulo, lo agrego al arreglo y lo dibujo
+        #     else:
+        #         self.triangles.append(t)
+        #         self.canvas.drawLine(t.v2, t.v3)
+        #         self.canvas.drawLine(t.v1, t.v3)
+        #         return
+        # else:
+        self.triangles.append(t)
+        self.counter += 1
+        self.canvas.drawLine(t.v2, t.v3)
+        self.canvas.drawLine(t.v1, t.v3)
+        return
 
 
 

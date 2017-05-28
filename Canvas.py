@@ -6,11 +6,14 @@ import time
 import Delaunay
 
 from Point import Point
+from TerminalEdgeAlgorithm import TerminalEdgeAlgorithm
 
 
 class Canvas:
-    def __init__(self,w,h):
+    def __init__(self,w,h,minAngle):
         self.delaunay = Delaunay.Delaunay(self,w,h)
+        self.terminalEdgeAlgorithm = None
+        self.minAngle = minAngle
         self.tk = Tkinter.Tk()
         self.tk.wm_title("Delaunay Triangulation")
         self.canvas = Tkinter.Canvas(self.tk, bg="white", height=h, width=w)
@@ -33,15 +36,8 @@ class Canvas:
         self.callback(Point(350,self.h-345))
 
     def simpleGrid(self,event):
-        self.callback(Point(480, self.h - 560))
-        self.callback(Point(880, self.h - 560))
-        self.callback(Point(480,self.h-160))
-        self.callback(Point(880,self.h-160))
-        self.callback(Point(480,self.h - 360))
-        self.callback(Point(880, self.h - 360))
-        self.callback(Point(680, self.h - 560))
-        self.callback(Point(680, self.h - 360))
-        self.callback(Point(680, self.h - 160))
+        self.terminalEdgeAlgorithm = TerminalEdgeAlgorithm(self.delaunay.triangles,self.minAngle,self)
+
 
     def randomPoint(self,event):
         self.callback(Point(random.randint(0,self.w),random.randint(0,self.h)))

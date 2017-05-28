@@ -2,6 +2,7 @@ import sys
 
 import math
 
+from Edge import Edge
 from Point import Point
 
 
@@ -15,6 +16,7 @@ class Triangle:
         self.t3 = t3
         self.bandera = False
         self.neighbour = None
+        self.maxEdge = None
 
     def __str__(self):
         return "Este es el triangulo [(%s,%s),(%s,%s),(%s,%s)]" % (
@@ -54,13 +56,16 @@ class Triangle:
 
     def defineNeighbour(self):
         triangle = self.t3
+        self.maxEdge =Edge(self.v1,self.v2)
         dist = self.v1.dist(self.v2)
         aux = self.v2.dist(self.v3)
         if (dist < aux):
             dist = aux
-            self.t1
+            self.maxEdge = Edge(self.v2, self.v3)
+            triangle=self.t1
         aux = self.v3.dist(self.v1)
         if (dist < aux):
+            self.maxEdge = Edge(self.v1, self.v2)
             triangle = self.t2
         return triangle
 
@@ -73,16 +78,45 @@ class Triangle:
         else:
             return self.neighbour.getTerminalTriangles()
 
-    def dotproduct(self,v1, v2):
-        return sum((a * b) for a, b in zip(v1, v2))
-
-    def length(self,v):
-        return math.sqrt(self,dotproduct(v, v))
-
-    def angle(self,v1, v2):
-        return math.acos(self.dotproduct(v1, v2) / (self.length(v1) * self.length(v2)))
 
     def isBadTriangle(self,minAngle):
+        edge1 = Edge(self.v1,self.v2)
+        edge2 = Edge(self.v2,self.v3)
+        edge3 = Edge(self.v3,self.v1)
+
+        if self.ang(edge1, edge2) <= minAngle:
+            return True
+        elif self.ang(edge2,edge3) <= minAngle:
+            return True
+        elif self.ang(edge3,edge1) <= minAngle:
+            return True
         return False
 
 
+    def dot(self,vector1,vector2):
+        return vector1[0] * vector2[0] + vector1[1] * vector2[1]
+
+
+    def ang(self,edge1,edge2):
+        vector1 = [(edge1.v1.x-edge1.v2.x),(edge1.v1.y - edge1.v2.x)]
+        vector2 = [(edge2.v1.x-edge2.v2.x),(edge2.v1.y - edge2.v2.x)]
+        dot_prod = self.dot(vector1,vector2)
+        magnitude1 = self.dot(vector1,vector1)**0.5
+        magnitude2 = self.dot(vector2,vector2)**0.5
+        cosen = dot_prod/magnitude1/magnitude2
+        angle = math.acos(cosen)
+        ang_deg = math.degrees(angle)%360
+
+        if ang_deg > 180:
+            return 360 -ang_deg
+        else:
+            return ang_deg
+
+    def getTriangleWithvertex(self,vertex):
+        if vertex is self.v1:
+            return self.t1
+        elif vertex is self.v2:
+            return self.t2
+        elif vertex is self.v3:
+            return self.t3
+        print "Ocurrio un error al determinar el vecino de %s",vertex
